@@ -1,0 +1,9 @@
+@import 'bootstrap/scss/bootstrap';
+
+.parsley-errors-list {
+    color: #f1416c;
+    list-style-type: none;
+    font-size: .815rem;
+    padding-left: 0;
+    margin-top: .3rem;
+}

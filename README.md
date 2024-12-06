@@ -1,66 +1,350 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Event Register System With API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Prerequisites
+- 8.1 or higher
+- Composer
+- Mysql
+- Laravel 11 installed
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Clone the repository:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+```bash
+git clone https://github.com/capamaroux1/assessment.git
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+cd your-repo-name
+```
 
-## Learning Laravel
+Install PHP dependencies using Composer:
+```bash
+composer install
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Copy the .env.example file to .env and configure it
+```bash
+cp .env.example .env
+```
+Set your database credentials in the .env file:
+```bash
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=your_database_user
+DB_PASSWORD=your_database_password
+```
+Generate an application key:
+```
+php artisan key:generate
+```
+Run migrations and seed the database:
+```
+php artisan migrate --seed
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Users for testing:
+Admin:
+- admin@mail.com
+- password
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Simple User:
+- user@mail.com
+- password
 
-## Laravel Sponsors
+## API Endpoints
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
+## GET
+`Login` [/api/login]
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+**Parameters**
 
-## Contributing
+`email` | required 
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+`password` | required
 
-## Code of Conduct
+**Response**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
+// Success Login
+{
+    "token": "2|86v3A1CQZyRw5neJ2htFoMwgk3yMjF0k2mNQrIfmaad1e693",
+    "message": "Login success"
+}
 
-## Security Vulnerabilities
+// Invalid Credentials
+{
+    "message": "Invalid credentials. Please check your email and password.",
+    "status": "error"
+}
+```
+___
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+## GET
+`User Profile` [/api/user/profile]
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Requires Authentication (bearer token). 
+
+
+**Response**
+
+```
+{
+    "data": {
+        "id": 2,
+        "first_name": "Myra",
+        "last_name": "Okuneva",
+        "email": "koch.stuart@example.org",
+        "created_at": "2024-12-05T22:55:51.000000Z",
+        "updated_at": "2024-12-05T22:55:51.000000Z"
+    }
+}
+```
+
+
+
+## GET
+`Get Events` [/api/events]
+
+Requires Authentication (bearer token). 
+
+Paginated Results
+
+**Response**
+
+```
+{
+    "data": [
+        {
+            "id": 1,
+            "start_date": "2024-12-05T00:00:00.000000Z",
+            "title": "Aut sapiente architecto expedita quia magnam sint",
+            "description": "Amet perspiciatis aspernatur culpa quibusdam est",
+            "capacity": 42,
+            "location": "Virtual",
+            "status": "Published",
+            "type": "Social"
+        },
+        {
+            "id": 2,
+            "start_date": "2024-12-05T00:00:00.000000Z",
+            "title": "Quaerat aut quod qui in rerum excepturi totam plac",
+            "description": "Id qui sunt aperiam reprehenderit error architec",
+            "capacity": 93,
+            "location": "Virtual",
+            "status": "Draft",
+            "type": "Training"
+        }
+    ],
+    "links": {
+        "first": "/api/events?page=1",
+        "last": "/api/events?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "/api/events?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": null,
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "path": "/api/events",
+        "per_page": 15,
+        "to": 2,
+        "total": 2
+    }
+}
+```
+
+
+
+## POST
+`Register for Event` [/api/events/{id}/register]
+
+Requires Authentication (bearer token). 
+
+
+**Parameters**
+
+`id` | required | Event ID
+
+
+**Response**
+
+```
+{
+    "message": "You are succesfully register to this event!"
+}
+```
+
+Email Confirmation
+
+Emails are sent automatically upon successful event registration.
+
+
+
+## POST
+`Unregister from Event` [/api/events/{id}/unregister]
+
+Requires Authentication (bearer token). 
+
+
+**Parameters**
+
+`id` | required | Event ID
+
+
+**Response**
+
+```
+{
+    "message": "You are succesfully unregister from this event!"
+}
+```
+
+
+
+## GET
+`Get Event attendees` [/api/events/{id}/attendees]
+
+Requires Authentication (bearer token). 
+
+
+**Parameters**
+
+`id` | required | Event ID
+
+
+**Response**
+
+```
+{
+    "data": [
+        {
+            "id": 2,
+            "first_name": "Myra",
+            "last_name": "Okuneva",
+            "email": "koch.stuart@example.org",
+            "created_at": "2024-12-05T22:55:51.000000Z",
+            "updated_at": "2024-12-05T22:55:51.000000Z"
+        }
+    ]
+}
+```
+
+
+## GET
+`Get Event Details` [/api/events/{id}]
+
+Requires Authentication (bearer token). 
+
+
+**Parameters**
+
+`id` | required | Event ID
+
+
+**Response**
+
+```
+{
+    "data": {
+        "id": 1,
+        "start_date": "2024-12-05T00:00:00.000000Z",
+        "title": "Aut sapiente architecto expedita quia magnam sint",
+        "description": "Amet perspiciatis aspernatur culpa quibusdam est",
+        "capacity": 42,
+        "location": "Virtual",
+        "status": "Published",
+        "type": "Social"
+    }
+}
+```
+
+## POST
+`Logout` [/api/auth/logout]
+
+Requires Authentication (bearer token). 
+
+
+**Response**
+
+```
+{
+    "message": "Logged out successfully"
+}
+```
+
+## GET
+`Get User Events` [/api/user/events]
+
+Requires Authentication (bearer token). 
+
+Paginated Results
+
+**Response**
+
+```
+{
+    "data": [
+        {
+            "id": 2,
+            "start_date": "2024-12-05T00:00:00.000000Z",
+            "title": "Quaerat aut quod qui in rerum excepturi totam plac",
+            "description": "Id qui sunt aperiam reprehenderit error architec",
+            "capacity": 93,
+            "location": "Virtual",
+            "status": "Draft",
+            "type": "Training"
+        }
+    ],
+    "links": {
+        "first": "http://event-manager.test/api/user/events?page=1",
+        "last": "http://event-manager.test/api/user/events?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http://event-manager.test/api/user/events?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": null,
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "path": "http://event-manager.test/api/user/events",
+        "per_page": 15,
+        "to": 1,
+        "total": 1
+    }
+}
+```
